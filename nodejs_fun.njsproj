@@ -1,0 +1,145 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>nodejs_fun</Name>
+    <RootNamespace>nodejs_fun</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>cfc37aee-8af5-4896-814b-231f2b25ba62</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>code\app.ts</StartupFile>
+    <StartWebBrowser>False</StartWebBrowser>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <EnableTypeScript>true</EnableTypeScript>
+    <StartWebBrowser>false</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="tlib\tsconfig.json" />
+    <TypeScriptCompile Include="code\app.ts" />
+    <Content Include="neo-ts\tsconfig.json" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="code\tsconfig.json" />
+    <TypeScriptCompile Include="neo-ts\neo\BigInteger.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\Aes.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\Base58.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\CryptoKey.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\ECCurve.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\ECDsa.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\ECFieldElement.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\ECPoint.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\Helper.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\RIPEMD160.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Cryptography\Sha256.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Fixed8.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Helper.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\BinaryReader.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\BinaryWriter.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\Caching\ITrackable.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\Caching\TrackableCollection.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\Caching\TrackState.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\Helper.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\ISerializable.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\MemoryStream.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\IO\Stream.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Map.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Promise.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Uint160.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Uint256.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\Uint64.ts" />
+    <TypeScriptCompile Include="neo-ts\neo\UintVariable.ts" />
+    <TypeScriptCompile Include="neo-ts\nep6\nep6wallet.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\avm2asm\avm2asm.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\avm2asm\byteReader.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\avm2asm\op.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\Base64.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\helper.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\opcode.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\ScriptBuilder.ts" />
+    <TypeScriptCompile Include="neo-ts\thinneo\TransAction.ts" />
+    <TypeScriptCompile Include="tlib\mod.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="code\" />
+    <Folder Include="neo-ts\3rdlib\" />
+    <Folder Include="neo-ts\3rdlib\component\" />
+    <Folder Include="neo-ts\3rdlib\rollup\" />
+    <Folder Include="tlib\" />
+    <Folder Include="neo-ts\" />
+    <Folder Include="neo-ts\neo\" />
+    <Folder Include="neo-ts\neo\Cryptography\" />
+    <Folder Include="neo-ts\neo\IO\" />
+    <Folder Include="neo-ts\neo\IO\Caching\" />
+    <Folder Include="neo-ts\nep6\" />
+    <Folder Include="neo-ts\thinneo\" />
+    <Folder Include="neo-ts\thinneo\avm2asm\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="neo-ts\3rdlib\base64js.min.js" />
+    <Compile Include="neo-ts\3rdlib\component\aes.js" />
+    <Compile Include="neo-ts\3rdlib\component\mode-ecb.js" />
+    <Compile Include="neo-ts\3rdlib\component\pad-nopadding.js" />
+    <Compile Include="neo-ts\3rdlib\component\pad-zeropadding.js" />
+    <Compile Include="neo-ts\3rdlib\rollup\aes.js" />
+    <Compile Include="neo-ts\3rdlib\scrypt-async.js" />
+  </ItemGroup>
+  <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

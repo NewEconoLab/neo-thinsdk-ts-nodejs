@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "amd",
+    "target": "es5",
+    "lib": ["es5"],
+    "sourceMap": true,
+    "outFile": "../lib.js",
+    "declaration": true,
+    "allowJs": false
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

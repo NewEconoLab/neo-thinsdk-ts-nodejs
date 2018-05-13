@@ -1,0 +1,12 @@
+{
+  "name": "nodejs_fun",
+  "version": "0.0.0",
+  "description": "nodejs_fun",
+  "main": "app.js",
+  "author": {
+    "name": "xiaoer"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.87"
+  }
+}
