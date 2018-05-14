@@ -1,6 +1,6 @@
 var fuck;
 (function (fuck) {
-    var abc = (function () {
+    var abc = /** @class */ (function () {
         function abc() {
         }
         abc.prototype.log = function () {

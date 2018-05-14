@@ -7,7 +7,7 @@
     "removeComments": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowJs": true,
+    "allowJs": false,
     "outFile": "../code/neo-ts.js"
   },
   "exclude": [
