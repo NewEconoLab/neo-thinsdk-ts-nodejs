@@ -1887,7 +1887,11 @@ var ThinNeo;
             });
         };
         Helper.GetAddrHash = function (addr) {
-            return null;
+            var buffer = new Buffer.Buffer(addr);
+            var strkey = Neo.Cryptography.Sha256.computeHash(buffer);
+            strkey = Neo.Cryptography.Sha256.computeHash(strkey);
+            var addresshash = new Uint8Array(strkey);
+            return addresshash.subarray(0, 4);
         };
         return Helper;
     }());

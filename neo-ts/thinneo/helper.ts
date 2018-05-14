@@ -377,7 +377,7 @@ module ThinNeo {
         }
 
         public static GetAddrHash(addr: string): any {
-            var buffer = new Buffer(addr);
+            var buffer = new Buffer.Buffer(addr);
             let strkey = Neo.Cryptography.Sha256.computeHash(buffer);
             strkey = Neo.Cryptography.Sha256.computeHash(strkey);
             var addresshash = new Uint8Array(strkey);
