@@ -1,7 +1,9 @@
-﻿module ThinNeo {
+﻿
+module ThinNeo {
     declare var scrypt: any;
-    declare var CryptoJS: any;
     var scrypt_loaded: boolean = false;
+    var CryptoJS = require('crypto-js');
+    var Buffer  = require("buffer");
     export class Helper {
         public static GetPrivateKeyFromWIF(wif: string): Uint8Array {
             if (wif == null) throw new Error("null wif");
@@ -150,24 +152,7 @@
             var usepk = PublicKey.encodePoint(false).subarray(1, 64);
             var key = new Neo.Cryptography.ECDsaCryptoKey(PublicKey);
             var ecdsa = new Neo.Cryptography.ECDsa(key);
-
-            //byte[] first = { 0x45, 0x43, 0x53, 0x31, 0x20, 0x00, 0x00, 0x00 };
-            //usepk = first.Concat(usepk).ToArray();
-
-            //using (System.Security.Cryptography.CngKey key = System.Security.Cryptography.CngKey.Import(usepk, System.Security.Cryptography.CngKeyBlobFormat.EccPublicBlob))
-            //using (System.Security.Cryptography.ECDsaCng ecdsa = new System.Security.Cryptography.ECDsaCng(key))
-
-            //using(var ecdsa = System.Security.Cryptography.ECDsa.Create(new System.Security.Cryptography.ECParameters
-            //{
-            //        Curve = System.Security.Cryptography.ECCurve.NamedCurves.nistP256,
-            //        Q = new System.Security.Cryptography.ECPoint
-            //    {
-            //        X = usepk.Take(32).ToArray(),
-            //        Y = usepk.Skip(32).ToArray()
-            //    }
-            //}))
             {
-                //var hash = sha256.ComputeHash(message);
                 return ecdsa.verify(message, signature);
             }
         }
@@ -283,6 +268,7 @@
                 logN: 14,
                 r: r,
                 p: p,
+                dkLen: 64,
                 encoding: 'hex'
             },
                 function (res) {
@@ -345,33 +331,40 @@
                 }
             }
             var addresshash = buffer.subarray(3, 3 + 4);
+            console.log("addresshash = " + addresshash.toString());
             var encryptedkey = buffer.subarray(7, 7 + 32);
-            //let uint8pass = this.String2Bytes(passphrase);
             scrypt(passphrase, addresshash, {
                 logN: 14,
                 r: r,
                 p: p,
+                dkLen: 64,
                 encoding: 'hex'
             },
-                function (res) {
-                    var u8dk = new Uint8Array(res);
+                function (res:string) {
+
+                    console.log(res);
+
+                    var u8dk = res.hexToBytes() //new Uint8Array(res);
+                    console.log("u8dk = " + u8dk.toString());
                     var derivedhalf1 = u8dk.subarray(0, 32);
+                    console.log("derivedhalf1 = " + derivedhalf1.toString());
                     var derivedhalf2 = u8dk.subarray(32, 64);
+                    console.log("derivedhalf2 = " + derivedhalf2.toString());
                     var u8xor = Helper.Aes256Decrypt_u8(encryptedkey, derivedhalf2);
+                    console.log("u8xor = "+u8xor.toString());
                     var prikey = new Uint8Array(u8xor.length);
                     for (var i = 0; i < 32; i++) {
                         prikey[i] = u8xor[i] ^ derivedhalf1[i];
                     }
+                    console.log("prikey = " + prikey.toString());
 
                     var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-                    var script_hash = Helper.GetPublicKeyScriptHashFromPublicKey(pubkey);
-                    var addr_b = Helper.GetAddressFromScriptHash(script_hash).hexToBytes();
+                    console.log("pubkey = " + pubkey.toString());
 
-                    var addr_h = Neo.Cryptography.Sha256.computeHash(addr_b);
-                    addr_h = Neo.Cryptography.Sha256.computeHash(addr_h);
-
-                    var addresshashgot = new Uint8Array(addr_h);
-                    addresshashgot = addresshashgot.subarray(0, 4);
+                    var address = Helper.GetAddressFromPublicKey(pubkey);
+                    console.log("address = " + address.toString());
+                    var addresshashgot = Helper.GetAddrHash(address);
+                    console.log("addresshashgot = " + addresshashgot.toString());
                     for (var i = 0; i < 4; i++) {
                         if (addresshash[i] != addresshashgot[i]) {
                             callback("error", "nep2 hash not match.");
@@ -381,6 +374,14 @@
                     }
                     callback("finish", prikey);
                 });
+        }
+
+        public static GetAddrHash(addr: string): any {
+            var buffer = new Buffer(addr);
+            let strkey = Neo.Cryptography.Sha256.computeHash(buffer);
+            strkey = Neo.Cryptography.Sha256.computeHash(strkey);
+            var addresshash = new Uint8Array(strkey);
+            return addresshash.subarray(0, 4);
         }
     }
 }

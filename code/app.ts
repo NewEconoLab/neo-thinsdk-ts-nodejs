@@ -49,8 +49,6 @@ function test_0(): void {
     console.log('Hello world');
 }
 function test_1(): void {
-
-
     var addr = "ALjSnMZidJqd18iQaoCgFun6iqWRm2cVtj";
     var uint8 = ThinNeo.Helper.GetPublicKeyScriptHash_FromAddress(addr);
     var hexstr = uint8.reverse().toHexString();
@@ -102,7 +100,10 @@ function test_5(): void {
     console.log("verify=" + b);
 }
 function test_6(): void
-{//這個需要把scrypt換掉
+{
+    loadNormalJS("../neo-ts/3rdlib/scrypt-async.js", "scrypt");
+     //loadNormalJS("../neo-ts/3rdlib/component/aes.js", "CryptoJS");
+    //這個需要把scrypt換掉
     var nep2 = "6PYT8kA51ffcAv3bJzbfcT6Uuc32QS5wHEjneRdkPYFxZSrirVHRPEpVwN";
     var n = 16384;
     var r = 8;

@@ -1554,6 +1554,8 @@ var ThinNeo;
 var ThinNeo;
 (function (ThinNeo) {
     var scrypt_loaded = false;
+    var CryptoJS = require('crypto-js');
+    var Buffer = require("buffer");
     var Helper = (function () {
         function Helper() {
         }
@@ -1770,43 +1772,24 @@ var ThinNeo;
             return str.hexToBytes();
         };
         Helper.GetNep2FromPrivateKey = function (prikey, passphrase, n, r, p, callback) {
-            if (n === void 0) { n = 16384; }
+            if (n === void 0) { n = 14; }
             if (r === void 0) { r = 8; }
             if (p === void 0) { p = 8; }
-            var pp = scrypt.getAvailableMod();
-            scrypt.setResPath('lib/asset');
-            var addresshash = null;
-            var ready = function () {
-                var param = {
-                    N: n,
-                    r: r,
-                    P: p
-                };
-                var opt = {
-                    maxPassLen: 32,
-                    maxSaltLen: 32,
-                    maxDkLen: 64,
-                    maxThread: 4
-                };
-                try {
-                    scrypt.config(param, opt);
-                }
-                catch (err) {
-                    console.warn('config err: ', err);
-                }
-            };
-            scrypt.onload = function () {
-                console.log("scrypt.onload");
-                scrypt_loaded = true;
-                ready();
-            };
-            scrypt.onerror = function (err) {
-                console.warn('scrypt err:', err);
-                callback("error", err);
-            };
-            scrypt.oncomplete = function (dk) {
-                console.log('done', scrypt.binToHex(dk));
-                var u8dk = new Uint8Array(dk);
+            var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
+            var addr = Helper.GetAddressFromPublicKey(pubkey).hexToBytes();
+            var strkey = Neo.Cryptography.Sha256.computeHash(addr);
+            strkey = Neo.Cryptography.Sha256.computeHash(strkey);
+            var addresshash = new Uint8Array(strkey);
+            addresshash = addresshash.subarray(0, 4);
+            console.log('strkey = ' + prikey);
+            scrypt(passphrase, addresshash, {
+                logN: 14,
+                r: r,
+                p: p,
+                dkLen: 64,
+                encoding: 'hex'
+            }, function (res) {
+                var u8dk = new Uint8Array(res);
                 var derivedhalf1 = u8dk.subarray(0, 32);
                 var derivedhalf2 = u8dk.subarray(32, 64);
                 var u8xor = new Uint8Array(32);
@@ -1818,8 +1801,9 @@ var ThinNeo;
                 buffer[0] = 0x01;
                 buffer[1] = 0x42;
                 buffer[2] = 0xe0;
+                var u8addr = Helper.String2Bytes(strkey);
                 for (var i = 3; i < 3 + 4; i++) {
-                    buffer[i] = addresshash[i - 3];
+                    buffer[i] = u8addr[i - 3];
                 }
                 for (var i = 7; i < 32 + 7; i++) {
                     buffer[i] = encryptedkey[i - 7];
@@ -1836,32 +1820,11 @@ var ThinNeo;
                 }
                 var base58str = Neo.Cryptography.Base58.encode(outbuf);
                 callback("finish", base58str);
-            };
-            scrypt.onprogress = function (percent) {
-                console.log('onprogress');
-            };
-            scrypt.onready = function () {
-                var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-                var script_hash = Helper.GetPublicKeyScriptHashFromPublicKey(pubkey);
-                var address = Helper.GetAddressFromScriptHash(script_hash);
-                var addrbin = scrypt.strToBin(address);
-                var b1 = Neo.Cryptography.Sha256.computeHash(addrbin);
-                b1 = Neo.Cryptography.Sha256.computeHash(b1);
-                var b2 = new Uint8Array(b1);
-                addresshash = b2.subarray(0, 4);
-                var passbin = scrypt.strToBin(passphrase);
-                scrypt.hash(passbin, addresshash, 64);
-            };
-            if (scrypt_loaded == false) {
-                scrypt.load("asmjs");
-            }
-            else {
-                ready();
-            }
+            });
             return;
         };
         Helper.GetPrivateKeyFromNep2 = function (nep2, passphrase, n, r, p, callback) {
-            if (n === void 0) { n = 16384; }
+            if (n === void 0) { n = 14; }
             if (r === void 0) { r = 8; }
             if (p === void 0) { p = 8; }
             var data = Neo.Cryptography.Base58.decode(nep2);
@@ -1885,76 +1848,46 @@ var ThinNeo;
                 }
             }
             var addresshash = buffer.subarray(3, 3 + 4);
+            console.log("addresshash = " + addresshash.toString());
             var encryptedkey = buffer.subarray(7, 7 + 32);
-            var pp = scrypt.getAvailableMod();
-            scrypt.setResPath('lib/asset');
-            var ready = function () {
-                var param = {
-                    N: n,
-                    r: r,
-                    P: p
-                };
-                var opt = {
-                    maxPassLen: 32,
-                    maxSaltLen: 32,
-                    maxDkLen: 64,
-                    maxThread: 4
-                };
-                try {
-                    scrypt.config(param, opt);
-                }
-                catch (err) {
-                    console.warn('config err: ', err);
-                }
-            };
-            scrypt.onload = function () {
-                console.log("scrypt.onload");
-                scrypt_loaded = true;
-                ready();
-            };
-            scrypt.oncomplete = function (dk) {
-                console.log('done', scrypt.binToHex(dk));
-                var u8dk = new Uint8Array(dk);
+            scrypt(passphrase, addresshash, {
+                logN: 14,
+                r: r,
+                p: p,
+                dkLen: 64,
+                encoding: 'hex'
+            }, function (res) {
+                console.log(res);
+                var u8dk = res.hexToBytes();
+                console.log("u8dk = " + u8dk.toString());
                 var derivedhalf1 = u8dk.subarray(0, 32);
+                console.log("derivedhalf1 = " + derivedhalf1.toString());
                 var derivedhalf2 = u8dk.subarray(32, 64);
+                console.log("derivedhalf2 = " + derivedhalf2.toString());
                 var u8xor = Helper.Aes256Decrypt_u8(encryptedkey, derivedhalf2);
+                console.log("u8xor = " + u8xor.toString());
                 var prikey = new Uint8Array(u8xor.length);
                 for (var i = 0; i < 32; i++) {
                     prikey[i] = u8xor[i] ^ derivedhalf1[i];
                 }
+                console.log("prikey = " + prikey.toString());
                 var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-                var script_hash = Helper.GetPublicKeyScriptHashFromPublicKey(pubkey);
-                var address = Helper.GetAddressFromScriptHash(script_hash);
-                var addrbin = scrypt.strToBin(address);
-                var b1 = Neo.Cryptography.Sha256.computeHash(addrbin);
-                b1 = Neo.Cryptography.Sha256.computeHash(b1);
-                var b2 = new Uint8Array(b1);
-                var addresshashgot = b2.subarray(0, 4);
+                console.log("pubkey = " + pubkey.toString());
+                var address = Helper.GetAddressFromPublicKey(pubkey);
+                console.log("address = " + address.toString());
+                var addresshashgot = Helper.GetAddrHash(address);
+                console.log("addresshashgot = " + addresshashgot.toString());
                 for (var i = 0; i < 4; i++) {
-                    if (addresshash[i] != b2[i]) {
+                    if (addresshash[i] != addresshashgot[i]) {
                         callback("error", "nep2 hash not match.");
                         return;
                     }
                 }
                 callback("finish", prikey);
-            };
-            scrypt.onerror = function (err) {
-                console.warn('scrypt err:', err);
-                callback("error", err);
-            };
-            scrypt.onprogress = function (percent) {
-                console.log('onprogress');
-            };
-            scrypt.onready = function () {
-                var passbin = scrypt.strToBin(passphrase);
-                scrypt.hash(passbin, addresshash, 64);
-            };
-            if (scrypt_loaded == false) {
-                scrypt.load("asmjs");
-            }
-            else {
-                ready();
-            }
+            });
+        };
+        Helper.GetAddrHash = function (addr) {
+            return null;
         };
         return Helper;
     }());
