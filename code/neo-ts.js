@@ -1776,12 +1776,11 @@ var ThinNeo;
             if (r === void 0) { r = 8; }
             if (p === void 0) { p = 8; }
             var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-            var addr = Helper.GetAddressFromPublicKey(pubkey).hexToBytes();
-            var strkey = Neo.Cryptography.Sha256.computeHash(addr);
-            strkey = Neo.Cryptography.Sha256.computeHash(strkey);
-            var addresshash = new Uint8Array(strkey);
-            addresshash = addresshash.subarray(0, 4);
-            console.log('strkey = ' + prikey);
+            console.log("pubkey = " + pubkey.toString());
+            var addr = Helper.GetAddressFromPublicKey(pubkey);
+            console.log("addr = " + addr.toString());
+            var addresshash = Helper.GetAddrHash(addr);
+            console.log("addresshash = " + addresshash.toString());
             scrypt(passphrase, addresshash, {
                 logN: 14,
                 r: r,
@@ -1789,7 +1788,8 @@ var ThinNeo;
                 dkLen: 64,
                 encoding: 'hex'
             }, function (res) {
-                var u8dk = new Uint8Array(res);
+                console.log("addresshash = " + addresshash.toString());
+                var u8dk = res.hexToBytes();
                 var derivedhalf1 = u8dk.subarray(0, 32);
                 var derivedhalf2 = u8dk.subarray(32, 64);
                 var u8xor = new Uint8Array(32);
@@ -1801,9 +1801,8 @@ var ThinNeo;
                 buffer[0] = 0x01;
                 buffer[1] = 0x42;
                 buffer[2] = 0xe0;
-                var u8addr = Helper.String2Bytes(strkey);
                 for (var i = 3; i < 3 + 4; i++) {
-                    buffer[i] = u8addr[i - 3];
+                    buffer[i] = addresshash[i - 3];
                 }
                 for (var i = 7; i < 32 + 7; i++) {
                     buffer[i] = encryptedkey[i - 7];
@@ -1848,7 +1847,6 @@ var ThinNeo;
                 }
             }
             var addresshash = buffer.subarray(3, 3 + 4);
-            console.log("addresshash = " + addresshash.toString());
             var encryptedkey = buffer.subarray(7, 7 + 32);
             scrypt(passphrase, addresshash, {
                 logN: 14,
@@ -1857,26 +1855,17 @@ var ThinNeo;
                 dkLen: 64,
                 encoding: 'hex'
             }, function (res) {
-                console.log(res);
                 var u8dk = res.hexToBytes();
-                console.log("u8dk = " + u8dk.toString());
                 var derivedhalf1 = u8dk.subarray(0, 32);
-                console.log("derivedhalf1 = " + derivedhalf1.toString());
                 var derivedhalf2 = u8dk.subarray(32, 64);
-                console.log("derivedhalf2 = " + derivedhalf2.toString());
                 var u8xor = Helper.Aes256Decrypt_u8(encryptedkey, derivedhalf2);
-                console.log("u8xor = " + u8xor.toString());
                 var prikey = new Uint8Array(u8xor.length);
                 for (var i = 0; i < 32; i++) {
                     prikey[i] = u8xor[i] ^ derivedhalf1[i];
                 }
-                console.log("prikey = " + prikey.toString());
                 var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-                console.log("pubkey = " + pubkey.toString());
                 var address = Helper.GetAddressFromPublicKey(pubkey);
-                console.log("address = " + address.toString());
                 var addresshashgot = Helper.GetAddrHash(address);
-                console.log("addresshashgot = " + addresshashgot.toString());
                 for (var i = 0; i < 4; i++) {
                     if (addresshash[i] != addresshashgot[i]) {
                         callback("error", "nep2 hash not match.");

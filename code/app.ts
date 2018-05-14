@@ -39,7 +39,8 @@ function initMenu() {
     mapTest["3"] = { name: "Test_Pubkey2Address", call: test_3 }
     mapTest["4"] = { name: "WifDecode", call: test_4 }
     mapTest["5"] = { name: "Sign&Vertify", call: test_5 }
-    mapTest["6"] = { name: "Nep2->Prikey", call: test_6}
+    mapTest["6"] = { name: "Nep2->Prikey", call: test_6 }
+    mapTest["7"] = {name:"PriKey->Nep2",call:test_7}
 
 }
 function test_0(): void {
@@ -101,8 +102,6 @@ function test_5(): void {
 }
 function test_6(): void
 {
-    loadNormalJS("../neo-ts/3rdlib/scrypt-async.js", "scrypt");
-     //loadNormalJS("../neo-ts/3rdlib/component/aes.js", "CryptoJS");
     //這個需要把scrypt換掉
     var nep2 = "6PYT8kA51ffcAv3bJzbfcT6Uuc32QS5wHEjneRdkPYFxZSrirVHRPEpVwN";
     var n = 16384;
@@ -113,9 +112,21 @@ function test_6(): void
         console.log("result=" + result);
     });
 }
+function test_7(): void {
+    var n = 16384;
+    var r = 8;
+    var p = 8;
+
+    var prikey = "94b3335830392a3586c2d7072cfe49efc3ef048876f526cbb7061b30a2278012".hexToBytes();
+    ThinNeo.Helper.GetNep2FromPrivateKey(prikey, "1", n, r, p, (info, result) => {
+        console.log("info=" + info);
+        console.log("result=" + result);
+    });
+}
 function main(): void {
 
     loadNormalJSs("neo-ts.js", ["Neo", "ThinNeo"]);
+    loadNormalJS("../neo-ts/3rdlib/scrypt-async.js", "scrypt");
 
     initMenu();
 
