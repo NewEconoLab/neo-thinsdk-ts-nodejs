@@ -1776,11 +1776,8 @@ var ThinNeo;
             if (r === void 0) { r = 8; }
             if (p === void 0) { p = 8; }
             var pubkey = Helper.GetPublicKeyFromPrivateKey(prikey);
-            console.log("pubkey = " + pubkey.toString());
             var addr = Helper.GetAddressFromPublicKey(pubkey);
-            console.log("addr = " + addr.toString());
             var addresshash = Helper.GetAddrHash(addr);
-            console.log("addresshash = " + addresshash.toString());
             scrypt(passphrase, addresshash, {
                 logN: 14,
                 r: r,
@@ -1788,7 +1785,6 @@ var ThinNeo;
                 dkLen: 64,
                 encoding: 'hex'
             }, function (res) {
-                console.log("addresshash = " + addresshash.toString());
                 var u8dk = res.hexToBytes();
                 var derivedhalf1 = u8dk.subarray(0, 32);
                 var derivedhalf2 = u8dk.subarray(32, 64);

@@ -109,7 +109,12 @@ function test_6(): void
     var p = 8
     ThinNeo.Helper.GetPrivateKeyFromNep2(nep2, "1", n, r, p, (info, result) => {
         console.log("info=" + info);
-        console.log("result=" + result);
+        var prikey = result as Uint8Array;
+        console.log("result=" + prikey.toHexString());
+        var pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
+        var address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
+        console.log("address=" + address);
+
     });
 }
 function test_7(): void {

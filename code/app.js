@@ -95,13 +95,16 @@ function test_5() {
 function test_6() {
     //這個需要把scrypt換掉
     var nep2 = "6PYT8kA51ffcAv3bJzbfcT6Uuc32QS5wHEjneRdkPYFxZSrirVHRPEpVwN";
-    // 6PYT8kA51oHx6iZmoRS5h4SQr24A6x3VwftjUVDgY3SxdXee9VbMUXV1LH
     var n = 16384;
     var r = 8;
     var p = 8;
     ThinNeo.Helper.GetPrivateKeyFromNep2(nep2, "1", n, r, p, function (info, result) {
         console.log("info=" + info);
-        console.log("result=" + result);
+        var prikey = result;
+        console.log("result=" + prikey.toHexString());
+        var pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
+        var address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
+        console.log("address=" + address);
     });
 }
 function test_7() {
