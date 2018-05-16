@@ -4,7 +4,7 @@ var readline = require('readline');
 
 //习惯了直接加载，require 只支持commonjs 不方便
 function loadNormalJS(filename, namespace){
-    var js = fs.readFileSync(__dirname + "\\" + filename).toString();
+    var js = fs.readFileSync(path.join(__dirname,filename)).toString();
 
     //我这样加一句把命名空间丢进global，对nodejs来说，就可以访问了
     //global["fuck"] =fuck; 相当于在js文件后面加上这样一句

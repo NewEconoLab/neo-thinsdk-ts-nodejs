@@ -1,6 +1,6 @@
 {
   "name": "nel-neo-thinsdk",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "NEL's NEO thinSDK",
   "main": "index.js",
   "author": "NewEconoLab",
