@@ -1,16 +1,32 @@
 {
-  "name": "nodejs_fun",
-  "version": "0.0.0",
-  "description": "nodejs_fun",
-  "main": "app.js",
-  "author": {
-    "name": "xiaoer"
-  },
+  "name": "nel-neo-thinsdk",
+  "version": "0.0.6",
+  "description": "NEL's NEO thinSDK",
+  "main": "index.js",
+  "author": "NewEconoLab",
   "devDependencies": {
     "@types/node": "^6.0.87"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
     "cryptojs": "^2.5.3"
-  }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NewEconoLab/neo-thinsdk-ts-nodejs.git"
+  },
+  "keywords": [
+    "NEL",
+    "NEO",
+    "thinSDK",
+    "SDK"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NewEconoLab/neo-thinsdk-ts-nodejs/issues"
+  },
+  "homepage": "https://github.com/NewEconoLab/neo-thinsdk-ts-nodejs#readme"
 }

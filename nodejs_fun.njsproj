@@ -94,6 +94,9 @@
     <Folder Include="neo-ts\thinneo\avm2asm\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="index.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="neo-ts\3rdlib\base64js.min.js" />
     <Compile Include="neo-ts\3rdlib\component\aes.js" />
     <Compile Include="neo-ts\3rdlib\component\mode-ecb.js" />
