@@ -1,10 +1,17 @@
-﻿### npm install
+﻿### init
+
+```
+npm init
+```
+
+### npm install
 
 ```
 npm i nel-neo-thinsdk
 ```
 
-### Test Code
+
+### Test Code(Maybe like app.js)
 
 ```
 var thinNeo = require("nel-neo-thinsdk");

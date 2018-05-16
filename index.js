@@ -1,4 +1,6 @@
-﻿var fs = require("fs");
+﻿/// <reference path="code/neo-ts.d.ts" />
+
+var fs = require("fs");
 var path = require("path");
 var readline = require('readline');
 
@@ -11,9 +13,17 @@ function loadNormalJS(filename, namespace){
     js += "\r\n global['" + namespace + "']=" + namespace;
     eval(js);
 }
-loadNormalJS("code/neo-ts.js", "Neo");
-loadNormalJS("code/neo-ts.js", "ThinNeo");
+function loadNormalJSs(filename, namespaces){
+    var js = fs.readFileSync(path.join(__dirname, filename)).toString();
+    for (var i = 0; i < namespaces.length; i++) {
+        js += "\r\n global['" + namespaces[i] + "']=" + namespaces[i];
+    }
+    eval(js);
+}
+
+loadNormalJSs("code/neo-ts.js", ["Neo", "ThinNeo"]);
 loadNormalJS("neo-ts/3rdlib/scrypt-async.js", "scrypt");
+
 
 //sample
 
@@ -38,7 +48,6 @@ loadNormalJS("neo-ts/3rdlib/scrypt-async.js", "scrypt");
 //    var hexstr = uint8.reverse().toHexString();
 //    console.log("addr=" + addr);
 //    console.log("hex=" + hexstr);
-
 //}
 //function test_2() {
 //    console.log("Hash2Address");
@@ -48,7 +57,6 @@ loadNormalJS("neo-ts/3rdlib/scrypt-async.js", "scrypt");
 //    var addr = ThinNeo.Helper.GetAddressFromScriptHash(hash);
 //    console.log("hex=" + hexstr);
 //    console.log("addr=" + addr);
-
 //}
 //function test_3() {
 //    console.log("Test_Pubkey2Address");
